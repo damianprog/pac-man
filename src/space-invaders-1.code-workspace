@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../space-invaders-1"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"name": "tetris",
+			"path": "../../tetris"
+		}
+	],
+	"settings": {}
+}
