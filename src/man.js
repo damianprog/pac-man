@@ -3,7 +3,7 @@ import Position from './position.js'
 export default class Man {
     constructor(game) {
         this.game = game;
-        this.size = 40;
+        this.size = 17;
         this.speedX = 0;
         this.speedY = 0;
         this.position = new Position(100, 400);
@@ -38,8 +38,6 @@ export default class Man {
             this.position.y = this.position.y - (this.game.gameHeight + this.size);
         }
 
-
-
         this.game.allBlocks.forEach(block => {
             if (this.position.x + this.speedX * deltaTime + this.size / 2 >= block.position.x
                 && this.position.x + this.speedX * deltaTime - this.size / 2 <= block.position.x + block.size
@@ -48,10 +46,12 @@ export default class Man {
                 this.speedX = 0;
                 this.speedY = 0;
             } else {
-                this.position.x = this.position.x + this.speedX * deltaTime;
-                this.position.y = this.position.y + this.speedY * deltaTime;
+                // this.position.x = this.position.x + this.speedX * deltaTime;
+                // this.position.y = this.position.y + this.speedY * deltaTime;
             }
         });
+        this.position.x = this.position.x + this.speedX * deltaTime;
+        this.position.y = this.position.y + this.speedY * deltaTime;
 
     }
 

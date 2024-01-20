@@ -2,7 +2,7 @@ export default class Block {
     constructor(game, position) {
         this.game = game;
         this.position = position;
-        this.size = 50;
+        this.size = 20;
     }
 
     update(deltaTime) {

@@ -4,8 +4,8 @@ const canvas = document.querySelector("canvas");
 
 const ctx = canvas.getContext("2d");
 
-const GAME_WIDTH = 592;
-const GAME_HEIGHT = 550;
+const GAME_WIDTH = 600;
+const GAME_HEIGHT = 600;
 
 const game = new Game(GAME_WIDTH, GAME_HEIGHT);
 
