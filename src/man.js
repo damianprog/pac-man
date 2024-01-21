@@ -3,10 +3,10 @@ import Position from './position.js'
 export default class Man {
     constructor(game) {
         this.game = game;
-        this.size = 17;
+        this.size = 13;
         this.speedX = 0;
         this.speedY = 0;
-        this.position = new Position(100, 400);
+        this.position = new Position(300, 400);
         this.canMoveRight = true;
         this.canMoveLeft = true;
         this.canMoveUp = true;
@@ -45,9 +45,6 @@ export default class Man {
                 && this.position.y + this.speedY * deltaTime - this.size / 2 <= block.position.y + block.size) {
                 this.speedX = 0;
                 this.speedY = 0;
-            } else {
-                // this.position.x = this.position.x + this.speedX * deltaTime;
-                // this.position.y = this.position.y + this.speedY * deltaTime;
             }
         });
         this.position.x = this.position.x + this.speedX * deltaTime;
@@ -58,7 +55,7 @@ export default class Man {
     moveLeft() {
         if (this.canMoveLeft) {
             this.speedY = 0;
-            this.speedX = -0.2;
+            this.speedX = -0.1;
             this.canMoveRight = true;
         }
     }
@@ -66,7 +63,7 @@ export default class Man {
     moveRight() {
         if (this.canMoveRight) {
             this.speedY = 0;
-            this.speedX = 0.2;
+            this.speedX = 0.1;
             this.canMoveLeft = true;
         }
     }
@@ -74,7 +71,7 @@ export default class Man {
     moveUp() {
         if (this.canMoveUp) {
             this.speedX = 0;
-            this.speedY = -0.2;
+            this.speedY = -0.1;
             this.canMoveDown = true;
         }
     }
@@ -82,7 +79,7 @@ export default class Man {
     moveDown() {
         if (this.canMoveDown) {
             this.speedX = 0;
-            this.speedY = 0.2;
+            this.speedY = 0.1;
             this.canMoveUp = true;
         }
 

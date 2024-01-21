@@ -16,12 +16,12 @@ export default class Game {
         this.initializeBlocks();
     }
 
-    initializeFood() {
-        const allFood = [];
-        let foodPosition = new Position(350, 350);
-        allFood.push(new Food(this, foodPosition));
-        return allFood;
-    }
+    // initializeFood() {
+    //     const allFood = [];
+    //     let foodPosition = new Position(250, 300);
+    //     allFood.push(new Food(this, foodPosition));
+    //     return allFood;
+    // }
 
     initializeBlocks() {
         const allBlocks = [];
