@@ -9,6 +9,9 @@
 		{
 			"name": "tetris",
 			"path": "../../tetris"
+		},
+		{
+			"path": "../../asteroids"
 		}
 	],
 	"settings": {}

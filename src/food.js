@@ -1,3 +1,5 @@
+import collisionDetection from "./collisionDetection.js";
+
 export default class Food {
     constructor(game, position) {
         this.game = game;
@@ -7,10 +9,7 @@ export default class Food {
     }
 
     update(deltaTime, man) {
-        if (man.position.x + man.size / 2 > this.position.x - this.size / 2
-            && man.position.x - man.size / 2 < this.position.x + this.size / 2
-            && man.position.y + man.size / 2 > this.position.y - this.size / 2
-            && man.position.y - man.size / 2 < this.position.y + this.size / 2) {
+        if (collisionDetection(deltaTime, man, this)) {
             this.eaten = true;
         }
     }

@@ -1,16 +1,14 @@
 import Position from './position.js'
+import changeSide from './changeSide.js';
+import collisionDetection from './collisionDetection.js';
 
 export default class Man {
     constructor(game) {
         this.game = game;
-        this.size = 13;
+        this.size = 30;
         this.speedX = 0;
         this.speedY = 0;
-        this.position = new Position(300, 400);
-        this.canMoveRight = true;
-        this.canMoveLeft = true;
-        this.canMoveUp = true;
-        this.canMoveDown = true;
+        this.position = new Position(300, 291);
     }
 
     draw(ctx) {
@@ -22,27 +20,10 @@ export default class Man {
     }
 
     update(deltaTime) {
-        if (this.position.x > this.game.gameWidth + this.size / 2) {
-            this.position.x = this.position.x - (this.game.gameWidth + this.size);
-        }
-
-        if (this.position.x < 0 - this.size / 2) {
-            this.position.x = this.position.x + (this.game.gameWidth + this.size);
-        }
-
-        if (this.position.y < 0 - this.size / 2) {
-            this.position.y = this.position.y + this.game.gameHeight + this.size;
-        }
-
-        if (this.position.y > this.game.gameHeight + this.size / 2) {
-            this.position.y = this.position.y - (this.game.gameHeight + this.size);
-        }
+        this.position = changeSide(this.game, this);
 
         this.game.allBlocks.forEach(block => {
-            if (this.position.x + this.speedX * deltaTime + this.size / 2 >= block.position.x
-                && this.position.x + this.speedX * deltaTime - this.size / 2 <= block.position.x + block.size
-                && this.position.y + this.speedY * deltaTime + this.size / 2 >= block.position.y
-                && this.position.y + this.speedY * deltaTime - this.size / 2 <= block.position.y + block.size) {
+            if (collisionDetection(deltaTime, this, block)) {
                 this.speedX = 0;
                 this.speedY = 0;
             }
@@ -53,35 +34,23 @@ export default class Man {
     }
 
     moveLeft() {
-        if (this.canMoveLeft) {
-            this.speedY = 0;
-            this.speedX = -0.1;
-            this.canMoveRight = true;
-        }
+        this.speedY = 0;
+        this.speedX = -0.1;
     }
 
     moveRight() {
-        if (this.canMoveRight) {
-            this.speedY = 0;
-            this.speedX = 0.1;
-            this.canMoveLeft = true;
-        }
+        this.speedY = 0;
+        this.speedX = 0.1;
     }
 
     moveUp() {
-        if (this.canMoveUp) {
-            this.speedX = 0;
-            this.speedY = -0.1;
-            this.canMoveDown = true;
-        }
+        this.speedX = 0;
+        this.speedY = -0.1;
     }
 
     moveDown() {
-        if (this.canMoveDown) {
-            this.speedX = 0;
-            this.speedY = 0.1;
-            this.canMoveUp = true;
-        }
+        this.speedX = 0;
+        this.speedY = 0.1;
 
     }
 }

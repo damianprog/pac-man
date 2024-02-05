@@ -4,6 +4,7 @@ import Man from "./man.js";
 import Position from "./position.js";
 import Block from "./block.js";
 import { Board } from "./board.js";
+import Ghost from "./ghost.js";
 
 export default class Game {
     constructor(gameWidth, gameHeight) {
@@ -13,17 +14,12 @@ export default class Game {
         this.input = new Input(this.man, this);
         this.allBlocks = [];
         this.allFood = [];
-        this.initializeBlocks();
+        this.allGhosts = [];
+        this.initializeBoard();
+        this.initializeGhosts();
     }
 
-    // initializeFood() {
-    //     const allFood = [];
-    //     let foodPosition = new Position(250, 300);
-    //     allFood.push(new Food(this, foodPosition));
-    //     return allFood;
-    // }
-
-    initializeBlocks() {
+    initializeBoard() {
         const allBlocks = [];
         const allFood = [];
         let currentIndex = 0;
@@ -44,27 +40,28 @@ export default class Game {
         this.allFood = allFood;
     }
 
-    // Board.forEach((piece,index) => {
-    //     let row = index / 30;
-    //     if (piece === 1) {
-    //         allblocks.push(new Block(this, index))
-    //     }
-    // });
-    // allBlocks.push(new Block(this, blockPosition));
+    initializeGhosts() {
+        const ghost1 = new Ghost(this, new Position(350, 291), '#ff0000');
+        const ghost2 = new Ghost(this, new Position(172, 291), '#1b6914');
+        const ghost3 = new Ghost(this, new Position(430, 291), '#800080');
 
+        this.allGhosts.push(ghost1);
+        this.allGhosts.push(ghost2);
+        this.allGhosts.push(ghost3);
+    }
 
     draw(ctx) {
         this.man.draw(ctx);
         this.allFood.forEach(food => food.draw(ctx));
         this.allBlocks.forEach(block => block.draw(ctx));
+        this.allGhosts.forEach(ghost => ghost.draw(ctx));
     }
 
     update(deltaTime) {
         this.man.update(deltaTime);
         this.allFood = this.allFood.filter(food => food.eaten === false);
         this.allFood.forEach(food => food.update(deltaTime, this.man));
-
-
+        this.allGhosts.forEach(ghost => ghost.update(deltaTime));
     }
 
     clear(ctx) {
