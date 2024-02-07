@@ -8,10 +8,8 @@ export default class Food {
         this.eaten = false;
     }
 
-    update(deltaTime, man) {
-        if (collisionDetection(deltaTime, man, this)) {
-            this.eaten = true;
-        }
+    update(deltaTime) {
+
     }
 
     draw(ctx) {

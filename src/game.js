@@ -60,7 +60,7 @@ export default class Game {
     update(deltaTime) {
         this.man.update(deltaTime);
         this.allFood = this.allFood.filter(food => food.eaten === false);
-        this.allFood.forEach(food => food.update(deltaTime, this.man));
+        this.allFood.forEach(food => food.update(deltaTime));
         this.allGhosts.forEach(ghost => ghost.update(deltaTime));
     }
 

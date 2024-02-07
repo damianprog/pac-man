@@ -19,15 +19,30 @@ export default class Man {
         ctx.fill();
     }
 
-    update(deltaTime) {
-        this.position = changeSide(this.game, this);
-
+    checkCollisionWithBlocks(deltaTime) {
         this.game.allBlocks.forEach(block => {
             if (collisionDetection(deltaTime, this, block)) {
                 this.speedX = 0;
                 this.speedY = 0;
             }
         });
+    }
+
+    checkCollisionWithFood(deltaTime) {
+        this.game.allFood.forEach(food => {
+            if (collisionDetection(deltaTime, this, food)) {
+                food.eaten = true;
+            }
+        });
+    }
+
+    update(deltaTime) {
+        this.position = changeSide(this.game, this);
+
+        this.checkCollisionWithBlocks(deltaTime);
+
+        this.checkCollisionWithFood(deltaTime);
+
         this.position.x = this.position.x + this.speedX * deltaTime;
         this.position.y = this.position.y + this.speedY * deltaTime;
 
