@@ -8,15 +8,11 @@ export default class Man {
         this.size = 30;
         this.speedX = 0;
         this.speedY = 0;
-        this.position = new Position(300, 291);
+        this.setStartingPosition();
     }
 
-    draw(ctx) {
-        ctx.beginPath();
-
-        ctx.arc(this.position.x, this.position.y, this.size / 2, 0, 2 * Math.PI);
-        ctx.fillStyle = '#FFFF00';
-        ctx.fill();
+    setStartingPosition() {
+        this.position = new Position(300, 291);
     }
 
     checkCollisionWithBlocks(deltaTime) {
@@ -36,12 +32,30 @@ export default class Man {
         });
     }
 
+    checkCollisionWithGhosts(deltaTime) {
+        this.game.allGhosts.forEach(ghost => {
+            if (collisionDetection(deltaTime, this, ghost)) {
+                this.game.onGhostCollision();
+            }
+        });
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+
+        ctx.arc(this.position.x, this.position.y, this.size / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = '#FFFF00';
+        ctx.fill();
+    }
+
     update(deltaTime) {
         this.position = changeSide(this.game, this);
 
         this.checkCollisionWithBlocks(deltaTime);
 
         this.checkCollisionWithFood(deltaTime);
+
+        this.checkCollisionWithGhosts(deltaTime);
 
         this.position.x = this.position.x + this.speedX * deltaTime;
         this.position.y = this.position.y + this.speedY * deltaTime;

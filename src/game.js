@@ -41,13 +41,22 @@ export default class Game {
     }
 
     initializeGhosts() {
-        const ghost1 = new Ghost(this, new Position(350, 291), '#ff0000');
-        const ghost2 = new Ghost(this, new Position(172, 291), '#1b6914');
-        const ghost3 = new Ghost(this, new Position(430, 291), '#800080');
+        const ghost1 = new Ghost(this, new Position(110, 290), '#ff0000');
+        const ghost2 = new Ghost(this, new Position(300, 50), '#1b6914');
+        const ghost3 = new Ghost(this, new Position(493, 290), '#800080');
 
         this.allGhosts.push(ghost1);
         this.allGhosts.push(ghost2);
         this.allGhosts.push(ghost3);
+    }
+
+    onGhostCollision() {
+        this.man.speedX = 0;
+        this.man.speedY = 0;
+        this.man.setStartingPosition();
+
+        this.allGhosts = [];
+        this.initializeGhosts();
     }
 
     draw(ctx) {
