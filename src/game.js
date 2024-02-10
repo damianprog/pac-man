@@ -53,10 +53,17 @@ export default class Game {
     onGhostCollision() {
         this.man.speedX = 0;
         this.man.speedY = 0;
-        this.man.setStartingPosition();
 
-        this.allGhosts = [];
-        this.initializeGhosts();
+        this.allGhosts.forEach(ghost => {
+            ghost.speedX = 0;
+            ghost.speedY = 0;
+        });
+
+        setTimeout(() => {
+            this.man.setStartingPosition();
+            this.allGhosts = [];
+            this.initializeGhosts();
+        }, this.man.dyingDuration);
     }
 
     draw(ctx) {

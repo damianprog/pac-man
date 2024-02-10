@@ -8,11 +8,21 @@ export default class Man {
         this.size = 30;
         this.speedX = 0;
         this.speedY = 0;
+        this.movingDirections = {
+            up: 'up',
+            down: 'down',
+            left: 'left',
+            right: 'right'
+        };
+        this.isDying = false;
+        this.showMan = true;
+        this.dyingDuration = 3000;
         this.setStartingPosition();
     }
 
     setStartingPosition() {
         this.position = new Position(300, 291);
+        this.currentMovingDirection = this.movingDirections.right;
     }
 
     checkCollisionWithBlocks(deltaTime) {
@@ -32,20 +42,59 @@ export default class Man {
         });
     }
 
+    startDying() {
+        this.isDying = true;
+
+        const toggleShowManInterval = setInterval(() => {
+            this.showMan = !this.showMan;
+        }, 200);
+
+        setTimeout(() => {
+            clearInterval(toggleShowManInterval);
+            this.showMan = true;
+            this.isDying = false;
+        }, this.dyingDuration);
+    }
+
     checkCollisionWithGhosts(deltaTime) {
         this.game.allGhosts.forEach(ghost => {
             if (collisionDetection(deltaTime, this, ghost)) {
+                this.startDying();
                 this.game.onGhostCollision();
             }
         });
     }
 
-    draw(ctx) {
-        ctx.beginPath();
+    getCurrentMovingDirectionAngle() {
+        switch (this.currentMovingDirection) {
+            case 'right':
+                return 0;
+            case 'down':
+                return 90;
+            case 'left':
+                return 180;
+            case 'up':
+                return 266;
+        }
+    }
 
-        ctx.arc(this.position.x, this.position.y, this.size / 2, 0, 2 * Math.PI);
-        ctx.fillStyle = '#FFFF00';
-        ctx.fill();
+    draw(ctx) {
+        if (this.showMan) {
+            ctx.save();
+            ctx.translate(this.position.x, this.position.y);
+            ctx.rotate((this.getCurrentMovingDirectionAngle() * Math.PI) / 180);
+            ctx.translate(this.position.x * -1, this.position.y * -1);
+
+            ctx.beginPath();
+            ctx.arc(this.position.x, this.position.y, this.size / 2, 0.25 * Math.PI, 1.25 * Math.PI, false);
+            ctx.fillStyle = "#FFFF00";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(this.position.x, this.position.y, this.size / 2, 0.75 * Math.PI, 1.75 * Math.PI, false);
+            ctx.fill();
+
+            ctx.restore();
+        }
     }
 
     update(deltaTime) {
@@ -55,7 +104,9 @@ export default class Man {
 
         this.checkCollisionWithFood(deltaTime);
 
-        this.checkCollisionWithGhosts(deltaTime);
+        if (!this.isDying) {
+            this.checkCollisionWithGhosts(deltaTime);
+        }
 
         this.position.x = this.position.x + this.speedX * deltaTime;
         this.position.y = this.position.y + this.speedY * deltaTime;
@@ -63,23 +114,34 @@ export default class Man {
     }
 
     moveLeft() {
-        this.speedY = 0;
-        this.speedX = -0.1;
+        if (!this.isDying) {
+            this.speedY = 0;
+            this.speedX = -0.1;
+            this.currentMovingDirection = this.movingDirections.left;
+        }
     }
 
     moveRight() {
-        this.speedY = 0;
-        this.speedX = 0.1;
+        if (!this.isDying) {
+            this.speedY = 0;
+            this.speedX = 0.1;
+            this.currentMovingDirection = this.movingDirections.right;
+        }
     }
 
     moveUp() {
-        this.speedX = 0;
-        this.speedY = -0.1;
+        if (!this.isDying) {
+            this.speedX = 0;
+            this.speedY = -0.1;
+            this.currentMovingDirection = this.movingDirections.up;
+        }
     }
 
     moveDown() {
-        this.speedX = 0;
-        this.speedY = 0.1;
-
+        if (!this.isDying) {
+            this.speedX = 0;
+            this.speedY = 0.1;
+            this.currentMovingDirection = this.movingDirections.down;
+        }
     }
 }

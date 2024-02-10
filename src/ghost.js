@@ -41,12 +41,17 @@ export default class Ghost {
         }
     }
 
+    isDirectionChangeTimePassed() {
+        return new Date() - this.lastDirectionChange >= 3000;
+    }
+
     update(deltaTime) {
         this.position = changeSide(this.game, this);
 
         let collisionDetected = false;
 
-        if (new Date() - this.lastDirectionChange >= 3000) {
+        //checking if speed is not 0 beacause of pac man dying 3 sec freeze
+        if (this.isDirectionChangeTimePassed() && this.speedX != 0 && this.speedY != 0) {
             this.lastDirectionChange = new Date();
             this.setNewSpeed();
         }
