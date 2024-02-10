@@ -1,5 +1,3 @@
-import collisionDetection from "./collisionDetection.js";
-
 export default class Food {
     constructor(game, position) {
         this.game = game;

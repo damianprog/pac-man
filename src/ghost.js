@@ -1,5 +1,4 @@
 import changeSide from './changeSide.js'
-import collisionDetection from './collisionDetection.js';
 
 export default class Ghost {
     constructor(game, position, color) {
@@ -45,6 +44,15 @@ export default class Ghost {
         return new Date() - this.lastDirectionChange >= 3000;
     }
 
+    collisionDetection(block, deltaTime) {
+        if (this.position.x + this.speedX * deltaTime + this.size / 2 >= block.position.x
+            && this.position.x + this.speedX * deltaTime - this.size / 2 <= block.position.x + block.size
+            && this.position.y + this.speedY * deltaTime + this.size / 2 >= block.position.y
+            && this.position.y + this.speedY * deltaTime - this.size / 2 <= block.position.y + block.size) {
+            return true;
+        }
+    }
+
     update(deltaTime) {
         this.position = changeSide(this.game, this);
 
@@ -57,7 +65,7 @@ export default class Ghost {
         }
 
         this.game.allBlocks.forEach(block => {
-            if (collisionDetection(deltaTime, this, block)) {
+            if (this.collisionDetection(block, deltaTime)) {
                 collisionDetected = true;
                 this.setNewSpeed();
             }

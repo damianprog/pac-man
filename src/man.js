@@ -1,6 +1,5 @@
 import Position from './position.js'
 import changeSide from './changeSide.js';
-import collisionDetection from './collisionDetection.js';
 
 export default class Man {
     constructor(game) {
@@ -25,23 +24,6 @@ export default class Man {
         this.currentMovingDirection = this.movingDirections.right;
     }
 
-    checkCollisionWithBlocks(deltaTime) {
-        this.game.allBlocks.forEach(block => {
-            if (collisionDetection(deltaTime, this, block)) {
-                this.speedX = 0;
-                this.speedY = 0;
-            }
-        });
-    }
-
-    checkCollisionWithFood(deltaTime) {
-        this.game.allFood.forEach(food => {
-            if (collisionDetection(deltaTime, this, food)) {
-                food.eaten = true;
-            }
-        });
-    }
-
     startDying() {
         this.isDying = true;
 
@@ -56,9 +38,40 @@ export default class Man {
         }, this.dyingDuration);
     }
 
+    collisionDetection(object, objectPosition, deltaTime) {
+        let objectSpeedX = object.speedX ? object.speedX * deltaTime : 0;
+        let objectSpeedY = object.speedY ? object.speedY * deltaTime : 0;
+
+        if (this.position.x + this.speedX * deltaTime + this.size / 2 >= objectPosition.x + objectSpeedX
+            && this.position.x + this.speedX * deltaTime - this.size / 2 <= objectPosition.x + objectSpeedX + object.size
+            && this.position.y + this.speedY * deltaTime + this.size / 2 >= objectPosition.y + objectSpeedY
+            && this.position.y + this.speedY * deltaTime - this.size / 2 <= objectPosition.y + objectSpeedY + object.size) {
+            return true;
+        }
+    }
+
+    checkCollisionWithBlocks(deltaTime) {
+        this.game.allBlocks.forEach(block => {
+            if (this.collisionDetection(block, block.position, deltaTime)) {
+                this.speedX = 0;
+                this.speedY = 0;
+            }
+        });
+    }
+
+    checkCollisionWithFood(deltaTime) {
+        this.game.allFood.forEach(food => {
+            const foodPosition = new Position(food.position.x - food.size / 2, food.position.y - food.size / 2);
+            if (this.collisionDetection(food, foodPosition, deltaTime)) {
+                food.eaten = true;
+            }
+        });
+    }
+
     checkCollisionWithGhosts(deltaTime) {
         this.game.allGhosts.forEach(ghost => {
-            if (collisionDetection(deltaTime, this, ghost)) {
+            const ghostPosition = new Position(ghost.position.x - ghost.size / 2, ghost.position.y - ghost.size / 2);
+            if (this.collisionDetection(ghost, ghostPosition, deltaTime)) {
                 this.startDying();
                 this.game.onGhostCollision();
             }
