@@ -44,6 +44,10 @@ canvas {
     padding-top: 100px;
 }
 
+.welcome-menu-info-panel img {
+    width: 300px;
+}
+
 .new-best-score {
     display: none;
 }
