@@ -1,4 +1,4 @@
-import changeSide from './changeSide.js'
+import changeSide from './change-side.js'
 
 export default class Ghost {
     constructor(game, position, color) {

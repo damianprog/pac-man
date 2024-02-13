@@ -1,5 +1,5 @@
 import Position from './position.js'
-import changeSide from './changeSide.js';
+import changeSide from './change-side.js';
 
 export default class Man {
     constructor(game) {
@@ -64,6 +64,7 @@ export default class Man {
             const foodPosition = new Position(food.position.x - food.size / 2, food.position.y - food.size / 2);
             if (this.collisionDetection(food, foodPosition, deltaTime)) {
                 food.eaten = true;
+                this.game.updateScores();
             }
         });
     }

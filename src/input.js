@@ -19,6 +19,10 @@ export default class Input {
                 case "ArrowUp":
                     this.man.moveUp();
                     break;
+
+                case ' ':
+                    this.game.start();
+                    break;
             }
         });
     }

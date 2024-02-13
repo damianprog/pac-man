@@ -5,22 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="pac-man.css" />
     <title>Pac-Man</title>
-    <style>
-        body {
-            background: #000;
-        }
-
-        canvas {
-            background: #000;
-        }
-
-        .main-container {
-            width: 600px;
-            display: flex;
-            margin: 21px auto 0 auto;
-        }
-    </style>
 </head>
 
 <body>
@@ -28,7 +14,23 @@
         <canvas width="600" height="600">
 
         </canvas>
-
+        <div class="labels">
+            <p>Lives:<span class="lives-qty"></span></p>
+            <p>Score:<span class="score-qty"></span></p>
+            <p>Best Score:<span class="best-score-qty"></span></p>
+        </div>
+        <div class="welcome-menu-info-panel">
+            <p>Pac-Man</p>
+            <p>Press Spacebar to start</p>
+        </div>
+        <div class="game-over-info-panel">
+            <p>Game Over</p>
+            <p class="score">Score:<span class="game-over-score-qty"></span></p>
+            <p class="new-best-score">
+                New Best Score!<br /><span class="new-best-score-qty"></span>
+            </p>
+            <p>Press<br />SPACEBAR<br />to restart</p>
+        </div>
     </div>
 
     <script type="module" src="src/index.js"></script>

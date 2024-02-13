@@ -1,0 +1,49 @@
+@font-face {
+    font-family: 'PressStart2P';
+    src: url('assets/fonts/PressStart2P-Regular.ttf');
+}
+
+body {
+    font-family: 'PressStart2P';
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+}
+
+canvas {
+    background: #000;
+}
+
+.main-container {
+    width: 600px;
+    display: flex;
+    margin: 21px auto 0 auto;
+}
+
+.labels {
+    margin: 0 0 0 10px;
+    white-space: nowrap;
+}
+
+.labels p:first-child {
+    margin-top: 0;
+}
+
+.pause-info-panel,
+.game-over-info-panel,
+.welcome-menu-info-panel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    line-height: 1.7em;
+    background: #000;
+    display: none;
+    padding-top: 100px;
+}
+
+.new-best-score {
+    display: none;
+}
