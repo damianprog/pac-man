@@ -12,11 +12,12 @@ export default class Game {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.gameState = GAME_STATE.WELCOME_MENU;
-        this.man = new Man(this);
-        this.input = new Input(this.man, this);
         this.allBlocks = [];
         this.allFood = [];
         this.allGhosts = [];
+        this.currentLevel = 1;
+        this.currentLives = 3;
+        this.currentScore = 0;
         this.initializeDefaults();
         this.initializeInfoPanels();
     }
@@ -45,6 +46,7 @@ export default class Game {
     initializeInfoPanels() {
         this.gameOverInfoPanel = document.querySelector('.game-over-info-panel');
         this.welcomeMenuInfoPanel = document.querySelector('.welcome-menu-info-panel');
+        this.levelInfoPanel = document.querySelector('.level-info-panel');
     }
 
     initializeGhosts() {
@@ -59,6 +61,8 @@ export default class Game {
     }
 
     initializeDefaults() {
+        this.man = new Man(this);
+        this.input = new Input(this.man, this);
         this.initializeBoard();
         this.initializeGhosts();
         this.livesQty = document.querySelector('.lives-qty');
@@ -67,20 +71,25 @@ export default class Game {
         this.gameOverScoreQty = document.querySelector('.game-over-score-qty');
         this.newBestScore = document.querySelector('.new-best-score');
         this.newBestScoreQty = document.querySelector('.new-best-score-qty');
+        this.levelQty = document.querySelector('.level-qty');
+        this.infoPanelLevelQty = document.querySelector('.info-panel-level-qty');
         this.localStorageBestScore = window.localStorage.getItem(
             'pacManBestScore'
         );
-        this.livesQty.innerHTML = 1;
-        this.scoreQty.innerHTML = 0;
+        this.levelQty.innerHTML = this.currentLevel;
+        this.livesQty.innerHTML = this.currentLives;
+        this.scoreQty.innerHTML = this.currentScore;
         this.setBestScore();
     }
 
     start() {
         if (
             this.gameState === GAME_STATE.WELCOME_MENU ||
-            this.gameState === GAME_STATE.GAME_OVER
+            this.gameState === GAME_STATE.GAME_OVER ||
+            this.gameState === GAME_STATE.LEVEL
         ) {
             this.initializeDefaults();
+            this.current
             this.gameState = GAME_STATE.RUNNING;
         }
     }
@@ -95,8 +104,8 @@ export default class Game {
         });
 
         setTimeout(() => {
-            const livesQty = parseInt(this.livesQty.innerHTML) - 1;
-            this.livesQty.innerHTML = livesQty;
+            this.currentLives--;
+            this.livesQty.innerHTML = this.currentLives;
             this.resolveGameOver();
             this.man.setStartingPosition();
             this.allGhosts = [];
@@ -105,8 +114,18 @@ export default class Game {
     }
 
     updateScores() {
-        this.scoreQty.innerHTML = parseInt(this.scoreQty.innerHTML) + 10;
+        this.currentScore = this.currentScore + 10;
+        this.scoreQty.innerHTML = this.currentScore + 10;
         this.setBestScore();
+        this.resolveLevelUp();
+    }
+
+    resolveLevelUp() {
+        if (this.allFood.length == 1) {
+            this.currentLevel++;
+            this.gameState = GAME_STATE.LEVEL;
+            setTimeout(() => this.start(), 4000);
+        }
     }
 
     resolveGameOver() {
@@ -133,6 +152,7 @@ export default class Game {
 
     update(deltaTime) {
         this.showInfo();
+
         if (this.gameState !== GAME_STATE.RUNNING) return;
         this.man.update(deltaTime);
         this.allFood = this.allFood.filter(food => food.eaten === false);
@@ -143,6 +163,10 @@ export default class Game {
     showInfo() {
         this.welcomeMenuInfoPanel.style.display = this.gameState === GAME_STATE.WELCOME_MENU ? 'block' : 'none';
         this.gameOverInfoPanel.style.display = this.gameState === GAME_STATE.GAME_OVER ? 'block' : 'none';
+        this.levelInfoPanel.style.display = this.gameState === GAME_STATE.LEVEL ? 'block' : 'none';
+        if (this.gameState === GAME_STATE.LEVEL) {
+            this.infoPanelLevelQty.innerHTML = this.currentLevel;
+        }
         if (this.gameState === GAME_STATE.GAME_OVER) {
             this.gameOverScoreQty.innerHTML = this.scoreQty.innerHTML;
             if (parseInt(this.scoreQty.innerHTML) < parseInt(this.localStorageBestScore.innerHTML)) {

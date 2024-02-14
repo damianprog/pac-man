@@ -31,7 +31,8 @@ canvas {
 
 .pause-info-panel,
 .game-over-info-panel,
-.welcome-menu-info-panel {
+.welcome-menu-info-panel,
+.level-info-panel {
     position: absolute;
     width: 100%;
     height: 100%;

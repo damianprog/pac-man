@@ -59,7 +59,7 @@ export default class Ghost {
         let collisionDetected = false;
 
         //checking if speed is not 0 beacause of pac man dying 3 sec freeze
-        if (this.isDirectionChangeTimePassed() && this.speedX != 0 && this.speedY != 0) {
+        if (this.isDirectionChangeTimePassed() && !this.game.man.isDying) {
             this.lastDirectionChange = new Date();
             this.setNewSpeed();
         }
