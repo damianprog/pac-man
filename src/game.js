@@ -145,7 +145,7 @@ export default class Game {
         this.gameOverInfoPanel.style.display = this.gameState === GAME_STATE.GAME_OVER ? 'block' : 'none';
         if (this.gameState === GAME_STATE.GAME_OVER) {
             this.gameOverScoreQty.innerHTML = this.scoreQty.innerHTML;
-            if (parseInt(this.scoreQty.innerHTML) > parseInt(this.bestScoreQty.innerHTML)) {
+            if (parseInt(this.scoreQty.innerHTML) < parseInt(this.localStorageBestScore.innerHTML)) {
                 this.newBestScore.style.display = 'block';
                 this.newBestScoreQty.innerHTML = this.bestScoreQty.innerHTML;
             }

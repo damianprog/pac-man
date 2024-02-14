@@ -17,6 +17,10 @@ export default class Man {
         this.showMan = true;
         this.dyingDuration = 3000;
         this.setStartingPosition();
+
+        const manYappingInterval = setInterval(() => {
+            this.isYapOpen = !this.isYapOpen;
+        }, 130);
     }
 
     setStartingPosition() {
@@ -100,13 +104,19 @@ export default class Man {
             ctx.translate(this.position.x * -1, this.position.y * -1);
 
             ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, this.size / 2, 0.25 * Math.PI, 1.25 * Math.PI, false);
             ctx.fillStyle = "#FFFF00";
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, this.size / 2, 0.75 * Math.PI, 1.75 * Math.PI, false);
-            ctx.fill();
 
+            if (this.isYapOpen && !this.isDying) {
+                ctx.arc(this.position.x, this.position.y, this.size / 2, 0, 2 * Math.PI, false);
+            } else {
+                ctx.beginPath();
+                ctx.arc(this.position.x, this.position.y, this.size / 2, 0.25 * Math.PI, 1.25 * Math.PI, false);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.position.x, this.position.y, this.size / 2, 0.75 * Math.PI, 1.75 * Math.PI, false);
+            }
+
+            ctx.fill();
             ctx.restore();
         }
     }
