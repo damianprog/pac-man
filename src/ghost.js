@@ -19,24 +19,25 @@ export default class Ghost {
         ctx.fill();
     }
 
-    getRandomSpeed() {
-        let rolledSpeed = 0.1;
+    getDirectionChangeRandomSpeed() {
+        let currentLevelSpeed = 0.1 + (this.game.currentLevel - 1) * 0.01;
+        let rolledSpeed = currentLevelSpeed;
 
         if (Math.random() > 0.5) {
-            rolledSpeed = -0.1;
+            rolledSpeed = -1 * currentLevelSpeed;
         }
 
         return rolledSpeed;
     }
 
-    setNewSpeed() {
+    setNewDirectionChangeSpeed() {
         this.speedX = 0;
         this.speedY = 0;
 
         if (Math.random() > 0.5) {
-            this.speedX = this.getRandomSpeed();
+            this.speedX = this.getDirectionChangeRandomSpeed();
         } else {
-            this.speedY = this.getRandomSpeed();
+            this.speedY = this.getDirectionChangeRandomSpeed();
         }
     }
 
@@ -61,13 +62,13 @@ export default class Ghost {
         //checking if speed is not 0 beacause of pac man dying 3 sec freeze
         if (this.isDirectionChangeTimePassed() && !this.game.man.isDying) {
             this.lastDirectionChange = new Date();
-            this.setNewSpeed();
+            this.setNewDirectionChangeSpeed();
         }
 
         this.game.allBlocks.forEach(block => {
             if (this.collisionDetection(block, deltaTime)) {
                 collisionDetected = true;
-                this.setNewSpeed();
+                this.setNewDirectionChangeSpeed();
             }
         });
 
