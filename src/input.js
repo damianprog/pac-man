@@ -1,7 +1,7 @@
 export default class Input {
-    constructor(man, game) {
-        this.man = man;
+    constructor(game) {
         this.game = game;
+        this.man = this.game.man;
         document.addEventListener("keydown", event => {
             switch (event.key) {
                 case "ArrowLeft":
@@ -22,6 +22,10 @@ export default class Input {
 
                 case ' ':
                     this.game.start();
+                    break;
+
+                case 'Escape':
+                    this.game.pause();
                     break;
             }
         });

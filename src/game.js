@@ -18,8 +18,10 @@ export default class Game {
         this.currentLevel = 1;
         this.currentLives = 3;
         this.currentScore = 0;
+        this.man = new Man(this);
         this.initializeDefaults();
         this.initializeInfoPanels();
+        this.input = new Input(this);
     }
 
     initializeBoard() {
@@ -47,6 +49,7 @@ export default class Game {
         this.gameOverInfoPanel = document.querySelector('.game-over-info-panel');
         this.welcomeMenuInfoPanel = document.querySelector('.welcome-menu-info-panel');
         this.levelInfoPanel = document.querySelector('.level-info-panel');
+        this.pausedInfoPanel = document.querySelector('.paused-info-panel');
     }
 
     initializeGhosts() {
@@ -61,8 +64,7 @@ export default class Game {
     }
 
     initializeDefaults() {
-        this.man = new Man(this);
-        this.input = new Input(this.man, this);
+        this.man.setStartingPosition();
         this.initializeBoard();
         this.initializeGhosts();
         this.livesQty = document.querySelector('.lives-qty');
@@ -89,7 +91,6 @@ export default class Game {
             this.gameState === GAME_STATE.LEVEL
         ) {
             this.initializeDefaults();
-            this.current
             this.gameState = GAME_STATE.RUNNING;
         }
     }
@@ -130,6 +131,9 @@ export default class Game {
 
     resolveGameOver() {
         if (parseInt(this.livesQty.innerHTML) == 0) {
+            this.currentLevel = 1;
+            this.currentLives = 3;
+            this.currentScore = 0;
             this.gameState = GAME_STATE.GAME_OVER;
         }
     }
@@ -139,7 +143,6 @@ export default class Game {
         if (parseInt(this.scoreQty.innerHTML) > bestScore) {
             bestScore = parseInt(this.scoreQty.innerHTML);
         }
-        window.localStorage.setItem('pacManBestScore', bestScore);
         this.bestScoreQty.innerHTML = bestScore;
     }
 
@@ -148,6 +151,15 @@ export default class Game {
         this.allFood.forEach(food => food.draw(ctx));
         this.allBlocks.forEach(block => block.draw(ctx));
         this.allGhosts.forEach(ghost => ghost.draw(ctx));
+    }
+
+    pause() {
+        if (this.gameState === GAME_STATE.RUNNING) {
+            this.gameState = GAME_STATE.PAUSED;
+        } else if (this.gameState === GAME_STATE.PAUSED) {
+            this.gameState = GAME_STATE.RUNNING;
+        }
+
     }
 
     update(deltaTime) {
@@ -160,19 +172,29 @@ export default class Game {
         this.allGhosts.forEach(ghost => ghost.update(deltaTime));
     }
 
+    resolveNewBestScore() {
+        const score = parseInt(this.scoreQty.innerHTML);
+        if (score > parseInt(this.localStorageBestScore)) {
+            this.newBestScore.style.display = 'block';
+            this.newBestScoreQty.innerHTML = this.bestScoreQty.innerHTML;
+            window.localStorage.setItem('pacManBestScore', score);
+        } else {
+            this.newBestScore.style.display = 'none';
+        }
+    }
+
     showInfo() {
         this.welcomeMenuInfoPanel.style.display = this.gameState === GAME_STATE.WELCOME_MENU ? 'block' : 'none';
         this.gameOverInfoPanel.style.display = this.gameState === GAME_STATE.GAME_OVER ? 'block' : 'none';
         this.levelInfoPanel.style.display = this.gameState === GAME_STATE.LEVEL ? 'block' : 'none';
+        this.pausedInfoPanel.style.display = this.gameState === GAME_STATE.PAUSED ? 'block' : 'none';
+
         if (this.gameState === GAME_STATE.LEVEL) {
             this.infoPanelLevelQty.innerHTML = this.currentLevel;
         }
         if (this.gameState === GAME_STATE.GAME_OVER) {
             this.gameOverScoreQty.innerHTML = this.scoreQty.innerHTML;
-            if (parseInt(this.scoreQty.innerHTML) < parseInt(this.localStorageBestScore.innerHTML)) {
-                this.newBestScore.style.display = 'block';
-                this.newBestScoreQty.innerHTML = this.bestScoreQty.innerHTML;
-            }
+            this.resolveNewBestScore();
         }
     }
 
